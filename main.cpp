@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+// Point structure
 struct Point {
 
 	float x;
@@ -28,21 +29,41 @@ int main(int argc, char *argv[]) {
 	dataFile.open(fileName);
 
 	// load data assuming only 240 per specification
-	// ignore first line as is currently not used
 	std::string line;
 	std::getline(dataFile, line);
+	
+	// decide if PPM structure
+	bool isPPM = (line.at(0) == 'P');
 	std::vector<Point> data(240);
 
 	Point tempPoint;
-	std::getline(dataFile, line);
-	while(!dataFile.eof()) {
-	
-		// tokenise to ordinates
-		// load ordinates to point
-		// load vector with new point	
-		std::getline(dataFile, line);
-	}	
+	std::string xString;
+	std::string yString;
+	std::string zString;
 
+	if(isPPM) {
+
+		while(dataFile >> xString >> yString >> zString) {
+
+			tempPoint.x = stof(xString);
+			tempPoint.y = stof(yString);
+			tempPoint.z = stof(yString);
+		
+			data.push_back(tempPoint);	
+		}
+	}
+
+	else {
+
+		while(dataFile >> xString >> yString) {
+
+			tempPoint.x = stof(xString);
+			tempPoint.y = stof(yString);
+		
+			data.push_back(tempPoint);	
+		}
+		
+	}
 	// randomise cluster selection from the given number of points
 	// perform a k means algorithm
 	// multiple k means trials
