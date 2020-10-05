@@ -1,8 +1,14 @@
 #include <cmath>
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
+#include <time.h>
+
+#define correctNumParams 3
+#define numClusterMinimum 2
+#define numDataPoints 240
 
 // Point structure
 struct Point {
@@ -23,18 +29,25 @@ float OptEucDist(Point* point, Point* cluster) {
 
 int main(int argc, char *argv[]) {
 
+	// function guard
+	if(argc != correctNumParams) return -1;
+	int numClusters = atoi(argv[2]);
+	if(numClusters < numClusterMinimum) return -1;
+
 	// open file given by command line
 	std::fstream dataFile;
 	char * fileName = argv[1];
 	dataFile.open(fileName);
+	if(!dataFile.good()) return -1;
 
 	// load data assuming only 240 per specification
 	std::string line;
 	std::getline(dataFile, line);
-	
+	std::cout << line << std::endl;	
+
 	// decide if PPM structure
 	bool isPPM = (line.at(0) == 'P');
-	std::vector<Point> data(240);
+	std::vector<Point> data(numDataPoints);
 
 	Point tempPoint;
 	std::string xString;
@@ -64,8 +77,21 @@ int main(int argc, char *argv[]) {
 		}
 		
 	}
+
 	// randomise cluster selection from the given number of points
+	srand(time(NULL));
+	size_t randomIndex = 0;
+	std::vector<Point> clusters(numClusters);
+	for(int i = 0; i < clusters.size(); i++) {
+
+		randomIndex = rand() % numDataPoints + 1;  
+		clusters.at(i) = data.at(randomIndex);
+	}
+
 	// perform a k means algorithm
+		// need vector of cluster allocation per point
+		// k means ends when vector of allocation remains the same
+
 	// multiple k means trials
 	// auto 'k' determination
 
