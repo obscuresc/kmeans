@@ -1,7 +1,11 @@
 CC = g++
+CFLAGS = -Wall -Werror -Wextra -pedantic
+
+.PHONY: clean
+
 
 main: main.cpp
-	$(CC) -o $@ $^ 
+	$(CC) $(CFLAGS) -o $@ $^ 
 
 clean:
-	rm -rf main *.o
+	rm -rf main
